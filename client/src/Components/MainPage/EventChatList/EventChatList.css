@@ -1,0 +1,10 @@
+.avatar-container {
+  display: flex;
+  padding: 10px;
+}
+
+.avatar-label {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}

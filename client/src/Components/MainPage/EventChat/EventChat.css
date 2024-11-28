@@ -1,0 +1,44 @@
+
+
+.chat-message-list-container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+}
+
+.flex-container {
+  display: flex;
+}
+
+.send-message-containter {
+  align-self: baseline;
+  margin-top: auto;
+  width: 100%;
+  display: flex;
+}
+
+.chat-messages-container {
+  padding: 1em;
+}
+
+.chat-message {
+  margin-left: 37px;
+}
+
+.chat-message.avatar {
+  margin-left: 5px;
+}
+
+.chat-message.event,
+.chat-message.avatar {
+  margin-bottom: 4px;
+}
+
+.avatar {
+  margin-top: auto
+}
+
+span:has(textarea) {
+  width: 100%;
+}
