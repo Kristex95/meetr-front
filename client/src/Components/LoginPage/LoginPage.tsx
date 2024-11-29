@@ -27,7 +27,6 @@ export default function LoginPage(props: {
 
   const handle_SignUp_Click = async (data: WebApi.RegisterInfo) => {
     await WebApi.registerUser(data);
-
     setPageType('login');
   };
 

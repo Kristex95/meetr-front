@@ -1,0 +1,17 @@
+.menu-main-container {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background:  rgba(0, 0, 0, 0.411);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-container {
+  max-height: 50%;
+  min-height: 30%;
+  max-width: 50%;
+  min-width: 30%;
+  background-color: var(--main-bg-color);
+}

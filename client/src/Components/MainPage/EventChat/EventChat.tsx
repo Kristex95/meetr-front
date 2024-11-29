@@ -8,7 +8,7 @@ import {
 } from '@fluentui/react-components';
 import { SendRegular, } from '@fluentui/react-icons';
 
-import Message from '../Message/Message';
+import Message from './Message/Message';
 import moment from 'moment';
 
 import { WebApi } from '../../../Scripts/webApi';
@@ -34,7 +34,7 @@ export default function EventChat(props: {
     const loadData = async () => {
       const users = await WebApi.getUsers();
 
-      setUsers(users);
+      //setUsers(users);
     };
 
     loadData();

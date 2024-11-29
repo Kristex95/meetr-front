@@ -1,0 +1,17 @@
+.sidebar-container {
+  display: grid;
+  grid-template-rows: auto 4em;
+}
+
+.sidebar-bottom {
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-menu-btn { 
+  height: 3em;
+  width: 3em;
+  border-radius: 100%;
+  background-color: #b5a9d4;
+  margin-left: 1em;
+}

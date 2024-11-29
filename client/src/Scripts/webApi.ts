@@ -60,21 +60,10 @@ const chats = [
   },
 ];
 
-const users = [
-  {
-    id: "1",
-    name: "Oleksandr",
-  },
-  {
-    id: "2",
-    name: "Victoria",
-  }
-];
 
 const loggedInUserId = "1";
 
 export namespace WebApi {
-  const url = "http://kristex.asuscomm.com:57775";
 
   export declare type LogInfo = {
     username: string,
@@ -83,15 +72,6 @@ export namespace WebApi {
 
   export declare type RegisterInfo = LogInfo & {
     email: string,
-  }
-
-  export function setAuthToken(token: string) {
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      console.log("JWT token set seccusfully!")
-    } else {
-      delete axios.defaults.headers.common['Authorization']; // Remove it if no token is present
-    }
   }
 
   export declare type ServerResponse<T> = {
@@ -107,6 +87,12 @@ export namespace WebApi {
     updatedAt: string,
   }
 
+  export declare type User = {
+    id: number,
+    username: string,
+    email: string
+  }
+
   export declare type Event = {
     id: number,
     name: string,
@@ -118,40 +104,32 @@ export namespace WebApi {
     updatedAt: string,
   }
 
-  function sendRequest(method: string, path: string, data: any) : Promise<AxiosResponse> {
-    return axios({
-      method: method.toLocaleLowerCase(),
-      url: 'http://localhost:8089' + path,
-      data: data,
-    });
-    return new Promise((resolve, reject) => {
-      const req = new XMLHttpRequest();
+  async function sendRequest(method: string, path: string, data: any): Promise<AxiosResponse> {
+    try {
+      const response = await axios({
+        method: method.toLocaleLowerCase(),
+        url: 'http://localhost:8089' + path,
+        data: data,
+      });
+      return response;
+    } catch (error) {
+      console.error('Request error:', error); // Log or handle error as needed
+      throw error; // Rethrow error so the caller can handle it
+    }
+  }
 
-      req.open(method, 'http://localhost:8080' + path);
-      req.setRequestHeader("Accept", "application/json");
-      req.setRequestHeader("Content-Type", "application/json; charset=utf-8");
-      req.onreadystatechange = function () {
-        if (this.readyState === 4) {
-          req.onreadystatechange = null;
+  
+  export function setAuthToken(token: string) {
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      console.log("JWT token set seccusfully!")
+    } else {
+      delete axios.defaults.headers.common['Authorization']; // Remove it if no token is present
+    }
+  }
 
-          if (this.status === 200) {
-            var result = this.response;
-
-            resolve(result);
-          } else {
-            alert(this.statusText);
-            //reject(this.statusText);
-          }
-        }
-      };
-
-      console.log("DATA", data)
-      if (data) {
-        req.send(JSON.stringify(data));
-      } else {
-        req.send();
-      }
-    });
+  export async function validateAuthToken(token: string) {
+    return await sendRequest("POST", "/api/auth/validateToken", token);
   }
 
   export async function logUser(data: LogInfo) {
@@ -162,21 +140,23 @@ export namespace WebApi {
     return await sendRequest("POST", "/api/auth/register", data);
   }
 
-  export async function getLoggedInUser() {
-    return users.find(u => u.id === loggedInUserId);
+  export async function getLoggedInUser() : Promise<User> {
+    const response : AxiosResponse<ServerResponse<User>> =  await sendRequest("GET", "/api/users/token", null);
+    const user : User = response.data.body;
+    return user;
   }
 
   export async function getUsers() {
-    return users;
+    return null;
   }
 
-  export async function getCurrentUserChats(loggedInUserId: string) : Promise<Chat[]>{
+  export async function getCurrentUserChats() : Promise<Chat[]>{
     const response: AxiosResponse<ServerResponse<Chat[]>> = await sendRequest("GET", "/api/users/chats", null);
     const chats: Chat[] = response.data.body;
     return chats; 
   };
 
-  export async function getCurrentUserEvents(loggedInUserId: string) : Promise<Event[]>{
+  export async function getCurrentUserEvents() : Promise<Event[]>{
     const response: AxiosResponse<ServerResponse<Event[]>> = await sendRequest("GET", "/api/users/events", null);
     const events: Event[] = response.data.body;
     return events; 

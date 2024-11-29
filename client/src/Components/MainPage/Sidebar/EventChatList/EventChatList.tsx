@@ -3,7 +3,7 @@ import {
   makeStyles,
   Avatar
 } from '@fluentui/react-components';
-import { WebApi } from '../../../Scripts/webApi';
+import { WebApi } from '../../../../Scripts/webApi';
 
 export default function EventChatList(props: {
   onClick: any,

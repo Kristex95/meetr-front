@@ -10,7 +10,6 @@ import {
 } from '@fluentui/react-components';
 import { SendRegular, } from '@fluentui/react-icons';
 
-import Message from '../../MainPage/Message/Message';
 import moment from 'moment';
 
 import { WebApi } from '../../../Scripts/webApi';

@@ -1,21 +1,20 @@
 import React from 'react';
 import EventChat from "./EventChat/EventChat";
-import EventChatList from "./EventChatList/EventChatList";
-import NoEventChats from "./NoEventChats/NoEventChats";
 import { WebApi } from '../../Scripts/webApi';
 
 import "./MainPage.css";
+import Sidebar from './Sidebar/Sidebar';
+import Menu from './Menu/Menu';
 
 export default function MainPage() {
-  const [chats, setChats] = React.useState<WebApi.Chat[]>([]);
-  const [events, setEvents] = React.useState<WebApi.Event[]>([]);
   const [selectedEventChat, setSelectedEventChat] = React.useState<any>(undefined);
+  const [isMenuActive, setIsMenuActive] = React.useState<boolean>(false);
 
-  const handle_EventChatList_Click = async (eventChat: any) => {
-    const messages = await WebApi.getChatMessages(eventChat.id);
+  const handle_EventChatList_Click = async (event: any) => {
+    const messages = await WebApi.getChatMessages(event.id);
 
     setSelectedEventChat({
-      chat: eventChat,
+      chat: event,
       messages: messages
     });
   };
@@ -31,31 +30,18 @@ export default function MainPage() {
     });
   };
 
-  React.useEffect(() => {
-    const loadData = async () => {
-      const loggedInUser = await WebApi.getLoggedInUser();
-
-      if (!loggedInUser) {
-        return;
-      }
-
-      const apiChats : WebApi.Chat[] = await WebApi.getCurrentUserChats(loggedInUser.id);
-      const apiEvents : WebApi.Event[] = await WebApi.getCurrentUserEvents(loggedInUser.id);
-      setChats(apiChats);
-      setEvents(apiEvents);
-    };
-
-    loadData();
-  }, []);
+  const handle_OpenCloseMenu_Click = () => {
+    setIsMenuActive(!isMenuActive);
+  }
 
   return (
     <div className="main-page-container">
-        {events.length > 0 ? (
-          <EventChatList onClick={handle_EventChatList_Click} chats={chats as any} events={events as any} />
-        ) : (
-          <NoEventChats/>
-        )}
+        <Sidebar 
+          onSelectEventClick={handle_EventChatList_Click} 
+          onOpenMenuClick={handle_OpenCloseMenu_Click}
+        />
         <EventChat data={selectedEventChat} onSendMessageClick={handle_SendMessage_Click} />
+        <Menu active={isMenuActive} onCloseMenuClick={handle_OpenCloseMenu_Click}/>
     </div>
   );
 }
