@@ -13,7 +13,11 @@ export default function EventChatList(props: {
   return (
     <div className="event-chat-list-container">
       {props.events?.map(event => (
-        <div className="avatar-container" onClick={() => props.onClick(event)}>
+        <div
+          key={event.id} // Add a unique key prop here
+          className="avatar-container"
+          onClick={() => props.onClick(event)}
+        >
           <Avatar
             color="colorful"
             aria-label={event.name}

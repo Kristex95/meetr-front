@@ -1,13 +1,4 @@
 import React from 'react';
-import {
-  useId,
-  Label,
-  Textarea,
-  Button,
-  TextareaProps,
-  Input,
-} from '@fluentui/react-components';
-import { SendRegular, } from '@fluentui/react-icons';
 import LogIn from './LogIn/LogIn';
 import Register from './Register/Register';
 import { WebApi } from '../../Scripts/webApi';

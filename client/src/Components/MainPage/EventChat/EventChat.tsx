@@ -1,4 +1,5 @@
 import './EventChat.css';
+
 import React from 'react';
 import {
   Avatar,
@@ -6,43 +7,99 @@ import {
   Button,
   TextareaProps,
 } from '@fluentui/react-components';
-import { SendRegular, } from '@fluentui/react-icons';
+import { SendRegular } from '@fluentui/react-icons';
 
 import Message from './Message/Message';
 import moment from 'moment';
 
 import { WebApi } from '../../../Scripts/webApi';
+import { WsTypes } from '../../../Scripts/messagingWs';
 
-export default function EventChat(props: {
-  data: {
-    chat: {
-      eventName: string,
-    }
-    messages: [
-      {
-        content: string,
-        fromUserId: string,
-      }
-    ],
-  },
+export default function EventChat(
+  props: { chat: WebApi.Chat, 
+  event: WebApi.Event, 
   onSendMessageClick: (message: string) => void,
 }) {
-  const [users, setUsers] = React.useState<any[] | undefined>(undefined);
-  const [message, setMessage] = React.useState<string>("");
+  const [users, setUsers] = React.useState<WebApi.User[]>();
+  const [loadedMessages, setLoadedMessages] = React.useState<WebApi.Message[]>();
+  const [messageText, setMessage] = React.useState<string>("");
+  const authToken = localStorage.getItem("authToken");
+  const [wsService, setWsService] = React.useState<WebSocket | null>(null);
 
   React.useEffect(() => {
-    const loadData = async () => {
-      const users = await WebApi.getUsers();
+    console.log("Render Event Chat");
+    const token = authToken != null ? authToken : "";
 
-      //setUsers(users);
+    // Load data when chat is available
+    const loadData = async () => {
+      if (props.chat) {
+        const users: WebApi.User[] = await WebApi.getUsers(props.chat.id);
+        const messages: WebApi.Message[] = await WebApi.getChatMessages(props.chat.id);
+        setUsers(users);
+        setLoadedMessages(messages);
+
+        // Create WebSocket connection if chat is present
+        const ws = new WebSocket(`ws://localhost:8089/ws?token=${encodeURIComponent(token)}`);
+
+        // WebSocket Event Handlers
+        ws.onopen = () => {
+          console.log("onOpen");
+          const subscriptionMessage = {
+            data: { chatId: props.chat.id },
+            channel: "message",
+            type: "subscribe",
+            token: token
+          };
+          ws.send(JSON.stringify(subscriptionMessage));
+        };
+    
+        ws.onmessage = (event) => {
+          setMessage(event.data);
+        };
+    
+        ws.onclose = (event) => {
+          console.log('WebSocket closed. Reason:', event.reason);
+        };
+    
+        ws.onerror = (error) => {
+          console.error('WebSocket Error:', error);
+        };
+
+        // Set WebSocket service
+        setWsService(ws);
+      }
     };
 
     loadData();
-  }, []);
+
+    // Cleanup WebSocket connection when chat changes or component unmounts
+    return () => {
+      if (wsService) {
+        wsService.close();
+      }
+    };
+  }, [props.chat, props.event]);
+
+  const sendMessage = (msg: any) => {
+    if (wsService) {
+      msg = JSON.stringify(msg);
+      wsService.send(msg);
+    }
+  };
 
   const handle_SendMessage_Click = () => {
-    if (message) {
-      props.onSendMessageClick(message);
+    if (messageText) {
+      props.onSendMessageClick(messageText);
+
+      const preparedMsg : WsTypes.WsMessage = {
+        data : {
+          chatId: props.chat.id,
+          content: messageText
+        },
+        channel: "message",
+        type: "send"
+      }
+      sendMessage(preparedMsg);
       setMessage("");
     }
   };
@@ -51,9 +108,9 @@ export default function EventChat(props: {
     setMessage(data.value);
   };
 
-  const messagesData = props.data?.messages.map((message, i) => ({
-    isFromNextUser: props.data.messages[i + 1]?.fromUserId !== message.fromUserId,
-    fromUser: users?.find(u => message.fromUserId === u.id),
+  const messagesData = loadedMessages?.map((message, i) => ({
+    isFromNextUser: loadedMessages[i + 1]?.senderId !== message.senderId,
+    fromUser: users?.find(u => message.senderId === u.id),
     content: message.content,
   }));
 
@@ -64,7 +121,7 @@ export default function EventChat(props: {
           <div className="chat-messages-container">
             <Message
               className="chat-message event"
-              data={{ message: "Sample event " + props.data.chat.eventName }}
+              data={{ message: "Sample event " + props.event.name }}
               event
               startsSequence
               endsSequence />
@@ -73,9 +130,9 @@ export default function EventChat(props: {
               <div className='flex-container'>
                 <Avatar className='avatar'
                   color="colorful"
-                  idForColor={message.fromUser?.id}
-                  aria-label={message.fromUser?.name}
-                  name={message.fromUser?.name}/>
+                  idForColor={message.fromUser?.id.toString()}
+                  aria-label={message.fromUser?.username}
+                  name={message.fromUser?.username}/>
                 <Message className="chat-message avatar"
                   data={{ message: message.content }}
                   startsSequence />
@@ -90,15 +147,13 @@ export default function EventChat(props: {
             
           </div>
           <div className='send-message-containter'>
-            <Textarea value={message} onChange={handle_Message_Change} />
+            <Textarea value={messageText} onChange={handle_Message_Change} />
             <Button icon={<SendRegular />} onClick={handle_SendMessage_Click}></Button>
           </div>
         </div>
       ) : (
-        <div>
-        </div>
+        <div></div>
       )}
-
     </div>
   );
 }

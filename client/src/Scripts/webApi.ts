@@ -1,68 +1,5 @@
 import axios, {isCancel, AxiosError, AxiosResponse} from 'axios';
 
-const messages = [
-  {
-    id: "1",
-    chatId: "1",
-    fromUserId: "1",
-    content: "Hello",
-  },
-  {
-    id: "2",
-    chatId: "1",
-    fromUserId: "1",
-    content: "It's me",
-  },
-  {
-    id: "3",
-    chatId: "1",
-    fromUserId: "2",
-    content: "Hello",
-  },
-  {
-    id: "5",
-    chatId: "2",
-    fromUserId: "1",
-    content: "How are you?",
-  },
-];
-
-const chats = [
-  {
-    id: "1",
-    eventName: "Meeting",
-    users: [
-      "1",
-      "2",
-    ],
-  },
-  {
-    id: "2",
-    eventName: "Party",
-    users: [
-      "1",
-      "2",
-    ],
-  },
-  {
-    id: "3",
-    eventName: "Wedding",
-    users: [
-      "1",
-    ],
-  },
-  {
-    id: "4",
-    eventName: "Buhich",
-    users: [
-      "1",
-    ],
-  },
-];
-
-
-const loggedInUserId = "1";
-
 export namespace WebApi {
 
   export declare type LogInfo = {
@@ -104,11 +41,21 @@ export namespace WebApi {
     updatedAt: string,
   }
 
+  export declare type Message = {
+    id: number,
+    senderId: number,
+    chatId: number,
+    content: string,
+    createdAt: string,
+    updatedAt: string,
+  }
+
   async function sendRequest(method: string, path: string, data: any): Promise<AxiosResponse> {
     try {
+      const apiUrl = process.env.REACT_APP_MEETR_BACKEND_API_URL;
       const response = await axios({
         method: method.toLocaleLowerCase(),
-        url: 'http://localhost:8089' + path,
+        url: apiUrl + path,
         data: data,
       });
       return response;
@@ -146,8 +93,10 @@ export namespace WebApi {
     return user;
   }
 
-  export async function getUsers() {
-    return null;
+  export async function getUsers(id: number) : Promise<User[]> {
+    const response: AxiosResponse<ServerResponse<User[]>> = await sendRequest("GET", `/api/events/${id}/users`, null);
+    const users: User[] = response.data.body;
+    return users;
   }
 
   export async function getCurrentUserChats() : Promise<Chat[]>{
@@ -162,16 +111,25 @@ export namespace WebApi {
     return events; 
   };
 
-  export async function getChatMessages(chatId: string) {
-    return messages.filter(m => m.chatId === chatId);
-  }
+  export async function getEventMainChat(chatId: number) : Promise<Chat> {
+    const response: AxiosResponse<ServerResponse<Chat>> = await sendRequest("GET", `/api/events/${chatId}/mainChat`, null);
+    const chat: Chat = response.data.body;
+    return chat; 
+  };
+
+  export async function getChatMessages(chatId: number) : Promise<Message[]> {
+    const response: AxiosResponse<ServerResponse<Message[]>> = await sendRequest("GET", `/api/chats/${chatId}/messages`, null);
+    const messages: Message[] = response.data.body;
+    return messages; 
+  };
+  
 
   export async function createMessage(chatId: string, message: string) {
-    messages.push({
-      id: `${messages.length}`,
-      chatId: chatId,
-      fromUserId: loggedInUserId,
-      content: message
-    });
+    // messages.push({
+    //   id: `${messages.length}`,
+    //   chatId: chatId,
+    //   fromUserId: loggedInUserId,
+    //   content: message
+    // });
   }
 }
