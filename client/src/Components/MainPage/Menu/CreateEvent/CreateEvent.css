@@ -1,0 +1,45 @@
+.event-create-dialog {
+  height: 95%!important;
+  width: 300px;
+}
+
+.event-create-dialog-body {
+  height: 100%;
+}
+
+.event-create-dialog.step0 {
+  max-height: 350px!important;
+}
+
+.event-create-dialog.step1 {
+  height: 95%;
+  max-height: 500px!important;
+}
+
+.event-create-dialog span:has(textarea),
+.event-create-dialog span:has(textarea):hover {
+  border-bottom-color: #adadad;
+  border-bottom-style: solid;
+}
+
+.users-search-container {
+  display: "flex";
+  flex-direction: "column";
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+.user-container {
+  width: 100%;
+  justify-content: start!important;
+  height: 45px;
+}
+
+.user-container .user {
+  margin-left: 10px;
+  font-weight: normal;
+}
+
+.users-search {
+  width: 100%;
+}

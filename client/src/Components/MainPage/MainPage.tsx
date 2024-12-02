@@ -36,12 +36,8 @@ export default function MainPage() {
 
   return (
     <div className="main-page-container">
-        <Sidebar 
-          onSelectEventClick={handle_EventChatList_Click} 
-          onOpenMenuClick={handle_OpenCloseMenu_Click}
-        />
-        <EventChat data={selectedEventChat} onSendMessageClick={handle_SendMessage_Click} />
-        <Menu active={isMenuActive} onCloseMenuClick={handle_OpenCloseMenu_Click}/>
+      <Menu active={isMenuActive} onCloseMenuClick={handle_OpenCloseMenu_Click} />
+      <EventChat data={selectedEventChat} onSendMessageClick={handle_SendMessage_Click} />
     </div>
   );
 }

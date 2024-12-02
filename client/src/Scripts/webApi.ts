@@ -96,6 +96,7 @@ export namespace WebApi {
   export declare type Event = {
     id: number,
     name: string,
+    description?: string,
     creatorId: number,
     chats: Chat[],
     participants: object,
@@ -147,7 +148,17 @@ export namespace WebApi {
   }
 
   export async function getUsers() {
-    return null;
+    return <User[]>[
+      {
+        username: "User 1",
+      },
+      {
+        username: "User 2",
+      },
+      {
+        username: "User 3",
+      },
+    ];
   }
 
   export async function getCurrentUserChats() : Promise<Chat[]>{
@@ -173,5 +184,22 @@ export namespace WebApi {
       fromUserId: loggedInUserId,
       content: message
     });
+  }
+
+  export async function createEventChat(event: Event) {
+    return await sendRequest("POST", "/api/events", event);
+  }
+
+  export async function changeUserData(user: User) {
+    return await sendRequest("PUT", `/api/users/${loggedInUserId}`, user);
+  }
+
+  export async function changePassword(oldPassword: string, newPassword: string) {
+    const data = {
+      oldPassword: oldPassword,
+      newPassword: newPassword,
+    };
+
+    return await sendRequest("PUT", `/api/users/${loggedInUserId}`, data);
   }
 }
