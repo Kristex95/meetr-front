@@ -1,0 +1,11 @@
+.menu-input {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-input-label {
+  color: #adadad;
+  font-size: 12px;
+  height: 12px;
+  margin-left: 12px;
+}

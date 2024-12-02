@@ -1,0 +1,13 @@
+.dialog-body {
+  height: 100%;
+}
+
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}
+
+.yesno-dialog {
+  width: 300px;
+}

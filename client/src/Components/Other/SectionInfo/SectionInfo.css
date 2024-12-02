@@ -1,0 +1,13 @@
+.section-info-icon {
+  margin-left: 12px;
+}
+
+.section-info {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: row;
+  column-gap: 7px;
+  font-weight: 600;
+  color: #d6d6d6;
+}

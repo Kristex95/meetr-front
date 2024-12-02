@@ -13,22 +13,25 @@ import {
   Spinner,
 } from "@fluentui/react-components";
 import { DatePicker } from "@fluentui/react-datepicker-compat";
-import { Dismiss24Regular, LockClosedRegular, PersonRegular } from "@fluentui/react-icons";
 
-import '../Menu.css';
+import './Friends.css';
+import '../Menu.css'
+import UsersList from "../../../Other/UsersList/UsersList";
+
 import { WebApi } from "../../../../Scripts/webApi";
-import MenuInput from "../MenuInput";
+import SectionInput from "../../../Other/SectionInput/SectionInput";
 
-export const ChangeUserField = (props: {
+export const Friends = (props: {
   isOpen: boolean,
-  fieldName: string,
-  fieldLabel: string,
   onOpenChange: (value: boolean) => void,
 }) => {
   const [isOpen, setIsOpen] = React.useState(props.isOpen);
-  const [fieldValue, setFieldValue] = React.useState("");
+
+  const [friends, setFriends] = React.useState<WebApi.User[]>([]);
   const [validationMessage, setValidationMessage] = React.useState<string>("");
   const [saving, setSaving] = React.useState<boolean>(false);
+
+  const datePickerRef: any = React.useRef();
 
   React.useEffect(() => {
     setIsOpen(props.isOpen);
@@ -45,7 +48,6 @@ export const ChangeUserField = (props: {
   }, [isOpen]);
 
   const setDefaultState = () => {
-    setFieldValue("");
     setValidationMessage("");
   }
 
@@ -58,46 +60,55 @@ export const ChangeUserField = (props: {
     setIsOpen(value);
     props.onOpenChange(value);
   }
+
+  const handle_UserList_Change = (members: WebApi.User[]) => {
+    setFriends(members);
+    setValidationMessage("");
+  }
+
   const handle_Cancel_Click = () => {
+    setFriends([]);
+    setValidationMessage("");
+
     closeDialog();
   }
 
-  const handle_Save_Click = async () => {
-    if (!fieldValue) {
-      setValidationMessage(`${props.fieldLabel} is empty.`);
+  const handle_Add_Click = async () => {
+    setValidationMessage("");
+
+    if (friends.length === 0) {
+      setValidationMessage("Please add at least one user.");
       return;
     }
 
     setSaving(true);
 
     try {
-      await WebApi.changeUserData(({[props.fieldName]: fieldValue} as unknown) as WebApi.User);
+      await WebApi.addFriends(friends);
 
       setSaving(false);
     }
     catch (e: any) {
       setValidationMessage(e.message);
       setSaving(false);
-      
+
       return;
     }
 
     closeDialog();
   }
 
+
+
   return (
     <Dialog open={isOpen} onOpenChange={(event, data) => handle_Dialog_OpenChange(data.open)}>
-      <DialogSurface className="change-userinfo-dialog">
-        <DialogBody className="dialog-body">
+      <DialogSurface className="friends-dialog" >
+        <DialogBody className="dialog-body" >
           <DialogContent>
             <div className="dialog-form">
-              <MenuInput value={fieldValue}>
-                <Input appearance="underline"
-                  placeholder={props.fieldLabel}
-                  value={fieldValue}
-                  onChange={(e, d) => setFieldValue(d.value)} />
-              </MenuInput>
-
+              <div style={{ overflowX: "clip" }}>
+                <UsersList title="Add friend" onChange={handle_UserList_Change} />
+              </div>
 
               {validationMessage &&
                 <div className='validation-error'>
@@ -107,7 +118,7 @@ export const ChangeUserField = (props: {
           </DialogContent>
           <DialogActions>
             <Button appearance="secondary" onClick={handle_Cancel_Click}>Cancel</Button>
-            <Button appearance="primary" onClick={handle_Save_Click}>{saving ? <Spinner size="tiny" /> : "Save"}</Button>
+            <Button appearance="primary" onClick={handle_Add_Click}>Add</Button>
           </DialogActions>
         </DialogBody>
       </DialogSurface>

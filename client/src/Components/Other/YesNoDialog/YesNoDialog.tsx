@@ -12,7 +12,7 @@ import {
   Textarea,
 } from "@fluentui/react-components";
 
-import '../Menu.css';
+import './YesNoDialog.css';
 
 export const YesNoDialog = (props: {
   open: boolean,

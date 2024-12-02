@@ -14,14 +14,14 @@ import {
 } from "@fluentui/react-components";
 import { DatePicker } from "@fluentui/react-datepicker-compat";
 
-import './CreateEvent.css';
+import './NewEvent.css';
 import '../Menu.css'
-import UsersList from "./UsersList";
+import UsersList from "../../../Other/UsersList/UsersList";
 
 import { WebApi } from "../../../../Scripts/webApi";
-import MenuInput from "../MenuInput";
+import SectionInput from "../../../Other/SectionInput/SectionInput";
 
-export const CreateEvent = (props: {
+export const NewEvent = (props: {
   isOpen: boolean,
   onOpenChange: (value: boolean) => void,
 }) => {
@@ -140,31 +140,31 @@ export const CreateEvent = (props: {
             <div className="dialog-form">
               {step === 0 ? (
                 <div className="dialog-form">
-                  <MenuInput value={eventName}>
+                  <SectionInput value={eventName}>
                     <Input placeholder="Event name" appearance="underline"
                       value={eventName}
                       onChange={(e, d) => setEventName(d.value)} />
-                  </MenuInput>
+                  </SectionInput>
 
-                  <MenuInput value={eventDate}>
+                  <SectionInput value={eventDate}>
                     <DatePicker ref={datePickerRef} placeholder="Event date" appearance="underline"
                       value={eventDate}
                       onSelectDate={d => setEventDate(d)}
                       onOpenChange={(o) => { if (!o) datePickerRef.current.blur() }} />
-                  </MenuInput>
+                  </SectionInput>
 
-                  <MenuInput value={eventDescription}>
+                  <SectionInput value={eventDescription}>
                     <Textarea placeholder="Event desctiption" appearance="filled-lighter"
                       value={eventDescription}
                       onChange={(e, d) => setEventDescription(d.value)} />
-                  </MenuInput>
+                  </SectionInput>
 
 
                 </div>
               ) :
                 step === 1 ? (
                   <div style={{ overflowX: "clip" }}>
-                    <UsersList onChange={handle_UserList_Change} />
+                    <UsersList title="Add members" onChange={handle_UserList_Change} />
                   </div>
 
                 ) : null}

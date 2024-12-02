@@ -9,13 +9,15 @@ import {
   useRestoreFocusTarget,
   FluentProvider,
   webDarkTheme,
+  Avatar,
 } from "@fluentui/react-components";
-import { NavigationRegular, PeopleTeamRegular, SettingsRegular } from "@fluentui/react-icons";
+import { NavigationRegular, PeopleRegular, PeopleTeamRegular, SettingsRegular } from "@fluentui/react-icons";
 
 import './Menu.css';
-import { CreateEvent } from "./CreateEvent/CreateEvent";
-import { UserSettings } from "./UserSettings/UserSettings";
-import { YesNoDialog } from "./SimpleDialogs/YesNoDialog";
+import { NewEvent } from "./NewEvent/NewEvent";
+import { Settings } from "./Settings/Settings";
+import { YesNoDialog } from "../../Other/YesNoDialog/YesNoDialog";
+import { Friends } from "./Friends/Friends";
 
 
 export default function Menu(props: any & {
@@ -23,6 +25,7 @@ export default function Menu(props: any & {
 }) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isNewEventOpen, setIsNewEventOpen] = React.useState(false);
+  const [isFriendsOpen, setIsFriendsOpen] = React.useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
   const [isLogOutOpen, setIsLogOutOpen] = React.useState(false);
 
@@ -34,6 +37,11 @@ export default function Menu(props: any & {
     setIsOpen(false);
   }
 
+  const handle_Friends_Click = () => {
+    setIsFriendsOpen(!isFriendsOpen);
+    setIsOpen(false);
+  }
+
   const handle_Settings_Click = () => {
     setIsSettingsOpen(!isSettingsOpen);
     setIsOpen(false);
@@ -41,6 +49,10 @@ export default function Menu(props: any & {
 
   const handle_EventCreate_OpenChange = (value: boolean) => {
     setIsNewEventOpen(value);
+  }
+
+  const handle_Friends_OpenChange = (value: boolean) => {
+    setIsFriendsOpen(value);
   }
 
   const handle_Settings_OpenChange = (value: boolean) => {
@@ -76,7 +88,15 @@ export default function Menu(props: any & {
         >
           <DrawerHeader>
             <DrawerHeaderTitle>
-              Settings
+              <div className="menu-avatar-container">
+                <Avatar
+                  color="colorful"
+                  size={48}
+                  aria-label={"user.username"}
+                  name={"user.username"}
+                />
+                <div style={{ fontSize: "16px" }}>User</div>
+              </div>
             </DrawerHeaderTitle>
           </DrawerHeader>
 
@@ -87,6 +107,13 @@ export default function Menu(props: any & {
               icon={<PeopleTeamRegular />}
               onClick={handle_NewEvent_Click} >
               New Event
+            </Button>
+            <Button
+              className="menu-button"
+              appearance="subtle"
+              icon={<PeopleRegular />}
+              onClick={handle_Friends_Click} >
+              Friends
             </Button>
             <Button
               className="menu-button"
@@ -113,11 +140,15 @@ export default function Menu(props: any & {
         >
         </Button>
 
-        <CreateEvent
+        <NewEvent
           isOpen={isNewEventOpen}
           onOpenChange={handle_EventCreate_OpenChange} />
 
-        <UserSettings
+        <Friends
+          isOpen={isFriendsOpen}
+          onOpenChange={handle_Friends_OpenChange} />
+
+        <Settings
           isOpen={isSettingsOpen}
           onOpenChange={handle_Settings_OpenChange} />
 

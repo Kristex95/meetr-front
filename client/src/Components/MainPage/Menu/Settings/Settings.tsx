@@ -15,13 +15,13 @@ import { DatePicker } from "@fluentui/react-datepicker-compat";
 import { Dismiss24Regular, LockClosedRegular, PersonRegular, MailRegular } from "@fluentui/react-icons";
 
 import '../Menu.css';
-import './UserSettings.css'
+import './Settings.css'
 
-import UserSettingsButton from "./UserSettingsButton";
-import { ChangeUserField } from "./ChangeUserField";
+import SectionButton from "../../../Other/SectionButton/SectionButton";
+import { ChangeFieldDialog } from "../../../Other/ChangeFieldDialog/ChangeFieldDialog";
 import { ChangeUserPassword } from "./ChangeUserPassword";
 
-export const UserSettings = (props: {
+export const Settings = (props: {
   isOpen: boolean,
   onOpenChange: (value: boolean) => void,
 }) => {
@@ -59,23 +59,23 @@ export const UserSettings = (props: {
           </DialogTitle>
           <DialogContent>
             <div className="menu-container">
-              <UserSettingsButton
+              <SectionButton
                 name="Change username"
-                dialog={p => ChangeUserField({fieldName: "username", fieldLabel: "Username", ...p})}
+                dialog={p => ChangeFieldDialog({fieldName: "username", fieldLabel: "Username", ...p})}
                 icon={<PersonRegular />} >
-              </UserSettingsButton>
+              </SectionButton>
 
-              <UserSettingsButton
+              <SectionButton
                 name="Change email"
-                dialog={p => ChangeUserField({fieldName: "email", fieldLabel: "Email", ...p})}
+                dialog={p => ChangeFieldDialog({fieldName: "email", fieldLabel: "Email", ...p})}
                 icon={<MailRegular />} >
-              </UserSettingsButton>
+              </SectionButton>
               
-              <UserSettingsButton
+              <SectionButton
                 name="Change password"
                 dialog={ChangeUserPassword}
                 icon={<LockClosedRegular />} >
-              </UserSettingsButton>
+              </SectionButton>
             </div>
           </DialogContent>
         </DialogBody>

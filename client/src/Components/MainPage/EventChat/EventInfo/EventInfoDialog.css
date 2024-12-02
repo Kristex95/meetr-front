@@ -1,0 +1,15 @@
+.event-info-dialog {
+  height: 95%!important;
+  max-height: 500px!important;
+  width: 400px;
+}
+
+.dialog-body {
+  height: 100%;
+}
+
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}

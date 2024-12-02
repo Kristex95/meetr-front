@@ -3,10 +3,6 @@
   width: 300px;
 }
 
-.event-create-dialog-body {
-  height: 100%;
-}
-
 .event-create-dialog.step0 {
   max-height: 350px!important;
 }
@@ -22,24 +18,3 @@
   border-bottom-style: solid;
 }
 
-.users-search-container {
-  display: "flex";
-  flex-direction: "column";
-  margin-top: 15px;
-  margin-bottom: 10px;
-}
-
-.user-container {
-  width: 100%;
-  justify-content: start!important;
-  height: 45px;
-}
-
-.user-container .user {
-  margin-left: 10px;
-  font-weight: normal;
-}
-
-.users-search {
-  width: 100%;
-}

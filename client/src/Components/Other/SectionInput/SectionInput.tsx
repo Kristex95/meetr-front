@@ -9,11 +9,9 @@ import {
   Button
 } from '@fluentui/react-components';
 
-import './Menu.css';
+import './SectionInput.css';
 
-
-
-export default function MenuInput(props: {
+export default function SectionInput(props: {
   children: any,
   name?: string,
   value: any,

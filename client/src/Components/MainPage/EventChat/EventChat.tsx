@@ -14,6 +14,7 @@ import moment from 'moment';
 
 import { WebApi } from '../../../Scripts/webApi';
 import { WsTypes } from '../../../Scripts/messagingWs';
+import { EventInfoDialog } from './EventInfo/EventInfoDialog';
 
 export default function EventChat(
   props: { chat: WebApi.Chat, 
@@ -27,6 +28,8 @@ export default function EventChat(
   const [wsService, setWsService] = React.useState<WebSocket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
+  const [isEventInfoOpen, setIsEventInfoOpen] = React.useState(false);
+  
   React.useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({
@@ -124,6 +127,14 @@ export default function EventChat(
     setMessage(data.value);
   };
 
+  const handle_EventHeader_Click = () => {
+    setIsEventInfoOpen(!isEventInfoOpen);
+  }
+
+  const handle_EventHeader_OpenChange = (value: boolean) => {
+    setIsEventInfoOpen(value);
+  }
+
   const messagesData = loadedMessages?.map((message, i) => ({
     isFromNextUser: loadedMessages[i + 1]?.senderId !== message.senderId,
     isFromPrevUser: loadedMessages[i - 1]?.senderId !== message.senderId,
@@ -134,7 +145,7 @@ export default function EventChat(
   return (
     <div className="event-chat-container">
       {props.event != null && (
-        <div className="event-header">
+        <div className="event-header" onClick={handle_EventHeader_Click}>
           <h2>{props.event.name}</h2>
         </div>
       )}
@@ -177,6 +188,11 @@ export default function EventChat(
       ) : (
         <div></div>
       )}
+
+      <EventInfoDialog
+        isOpen={isEventInfoOpen}
+        event={props.event}
+        onOpenChange={handle_EventHeader_OpenChange}/>
     </div>
   );
 }

@@ -6,6 +6,13 @@
   flex-direction: column;
 }
 
+.menu-avatar-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
 .menu-button {
   width: 100%;
   height: 40px;
@@ -13,25 +20,14 @@
 }
 
 .menu-button > * {
-  margin-left: 5px;
+  margin-left: 10px;
 }
 
 .menu-button.end {
   margin-top: auto;
-  padding-left: 20px;
+  padding-left: 25px;
+  padding-bottom: 20px;
   align-self: flex-end;
-}
-
-.menu-input {
-  display: flex;
-  flex-direction: column;
-}
-
-.menu-input-label {
-  color: #adadad;
-  font-size: 12px;
-  height: 12px;
-  margin-left: 12px;
 }
 
 .dialog-body {
@@ -55,8 +51,4 @@ span.validation-error {
 div.validation-error {
   font-size: 12px;
   margin-left: 12px;
-}
-
-.yesno-dialog {
-  width: 300px;
 }

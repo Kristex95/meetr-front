@@ -1,0 +1,21 @@
+.users-search-container {
+  display: "flex";
+  flex-direction: "column";
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+.user-container {
+  width: 100%;
+  justify-content: start!important;
+  height: 45px;
+}
+
+.user-container .user {
+  margin-left: 10px;
+  font-weight: normal;
+}
+
+.users-search {
+  width: 100%;
+}

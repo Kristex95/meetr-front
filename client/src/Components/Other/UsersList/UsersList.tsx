@@ -9,14 +9,15 @@ import {
   Button
 } from '@fluentui/react-components';
 
-import './CreateEvent.css';
+import './UsersList.css';
 
-import { WebApi } from '../../../../Scripts/webApi'
+import { WebApi } from '../../../Scripts/webApi'
 
 let apiUsers: WebApi.User[] = [];
 
 export default function UsersList(props: {
-  onChange: (users: WebApi.User[]) => void;
+  title: string,
+  onChange: (users: WebApi.User[]) => void,
 }) {
   const [users, setUsers] = React.useState<WebApi.User[]>([]);
   const [selectedUsers, setSelectedUsers] = React.useState<WebApi.User[]>([]);
@@ -60,7 +61,7 @@ export default function UsersList(props: {
 
   return (
     <div>
-      <div style={{ marginLeft: '10px', fontWeight: "lighter" }}>Add members</div>
+      <div style={{ marginLeft: '10px', fontWeight: "lighter" }}>{props.title}</div>
       <div className="users-search-container">
         {selectedUsers?.map(user => (
           <Tag

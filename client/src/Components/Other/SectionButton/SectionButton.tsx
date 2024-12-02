@@ -10,10 +10,10 @@ import {
 } from "@fluentui/react-components";
 import { NavigationRegular, PeopleTeamRegular, SettingsRegular } from "@fluentui/react-icons";
 
-import '../Menu.css';
+import './SectionButton.css';
 
 
-export default function UserSettingsButton(props: React.HTMLAttributes<HTMLDivElement> & {
+export default function SectionButton(props: React.HTMLAttributes<HTMLDivElement> & {
   name: string;
   icon: JSX.Element,
   dialog: React.ElementType<{
@@ -39,7 +39,7 @@ export default function UserSettingsButton(props: React.HTMLAttributes<HTMLDivEl
   return (
     <div>
       <Button
-        className="menu-button"
+        className="section-button"
         appearance="subtle"
         icon={props.icon}
         onClick={handle_MenuButton_Click} >

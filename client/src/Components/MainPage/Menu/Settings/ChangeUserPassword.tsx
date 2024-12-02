@@ -18,7 +18,7 @@ import { Dismiss24Regular, LockClosedRegular, PersonRegular } from "@fluentui/re
 import '../Menu.css';
 
 import { WebApi } from "../../../../Scripts/webApi";
-import MenuInput from "../MenuInput";
+import SectionInput from "../../../Other/SectionInput/SectionInput";
 
 export const ChangeUserPassword = (props: {
   isOpen: boolean,
@@ -105,23 +105,23 @@ export const ChangeUserPassword = (props: {
         <DialogBody className="dialog-body">
           <DialogContent>
             <div className="dialog-form">
-              <MenuInput value={oldPassword}>
+              <SectionInput value={oldPassword}>
                 <Input type="password" placeholder="Old password" appearance="underline"
                   value={oldPassword}
                   onChange={(e, d) => setOldPassword(d.value)} />
-              </MenuInput>
+              </SectionInput>
 
-              <MenuInput value={newPassword}>
+              <SectionInput value={newPassword}>
                 <Input type="password" placeholder="New password" appearance="underline"
                   value={newPassword}
                   onChange={(e, d) => setNewPassword(d.value)} />
-              </MenuInput>
+              </SectionInput>
 
-              <MenuInput value={newRepeatPassword}>
+              <SectionInput value={newRepeatPassword}>
                 <Input type="password" placeholder="Repeat new password" appearance="underline"
                   value={newRepeatPassword}
                   onChange={(e, d) => setNewRepeatPassword(d.value)} />
-              </MenuInput>
+              </SectionInput>
 
               {validationMessage &&
                 <div className='validation-error'>

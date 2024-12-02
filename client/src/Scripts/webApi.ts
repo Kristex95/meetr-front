@@ -156,4 +156,7 @@ export namespace WebApi {
 
     return await sendRequest("PUT", `/api/users`, data);
   }
+
+  export async function addFriends(users: User[]) {
+  }
 }
