@@ -13,5 +13,8 @@
 
 .event-chat-container {
   height: 100%;
+  display: grid;
+  grid-template-rows: 1fr 20fr;
+  overflow-y: auto;
   background-color: #23252a;
 }

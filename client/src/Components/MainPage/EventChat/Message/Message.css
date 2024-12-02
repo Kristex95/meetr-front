@@ -66,3 +66,9 @@
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
 }
+
+.message .bubble-container .bubble .starting {
+  font-style: italic;
+  font-weight: bold;
+  color: rgb(217, 127, 37);
+}

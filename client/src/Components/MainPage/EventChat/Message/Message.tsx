@@ -2,7 +2,7 @@ import './Message.css';
 import moment from 'moment';
 
 export default function Message(props: React.ComponentProps<any> | {
-  data: {timestamp: any, message: string},
+  data: {timestamp: any, message: string, username: string},
   event?: boolean,
   mine?: boolean,
   startsSequence?: boolean,
@@ -15,6 +15,7 @@ export default function Message(props: React.ComponentProps<any> | {
     event,
     startsSequence,
     endsSequence,
+    starting,
     showTimestamp
   } = props;
 
@@ -36,7 +37,11 @@ export default function Message(props: React.ComponentProps<any> | {
 
       <div className="bubble-container">
         <div className="bubble" title={friendlyTimestamp}>
-          { data.message }
+        {
+          starting && 
+          <div className='starting'>{data.username}</div>
+        }
+        { <div >{data.message}</div> }
         </div>
       </div>
     </div>

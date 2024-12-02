@@ -1,6 +1,6 @@
 import './EventChat.css';
 
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   Avatar,
   Textarea,
@@ -25,6 +25,15 @@ export default function EventChat(
   const [messageText, setMessage] = React.useState<string>("");
   const authToken = localStorage.getItem("authToken");
   const [wsService, setWsService] = React.useState<WebSocket | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  React.useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({
+        block: 'end',
+      });
+    }
+  }, [ loadedMessages])
 
   React.useEffect(() => {
     console.log("Render Event Chat");
@@ -54,7 +63,14 @@ export default function EventChat(
         };
     
         ws.onmessage = (event) => {
-          setMessage(event.data);
+          const incomingMessage: WebApi.Message = JSON.parse(event.data);
+
+          setLoadedMessages((prevMessages) => {
+            // Ensure `prevMessages` is not undefined
+            console.log(prevMessages);
+            if (!prevMessages) return [incomingMessage];
+            return [...prevMessages, incomingMessage];
+          });          
         };
     
         ws.onclose = (event) => {
@@ -110,22 +126,21 @@ export default function EventChat(
 
   const messagesData = loadedMessages?.map((message, i) => ({
     isFromNextUser: loadedMessages[i + 1]?.senderId !== message.senderId,
+    isFromPrevUser: loadedMessages[i - 1]?.senderId !== message.senderId,
     fromUser: users?.find(u => message.senderId === u.id),
     content: message.content,
   }));
 
   return (
     <div className="event-chat-container">
+      {props.event != null && (
+        <div className="event-header">
+          <h2>{props.event.name}</h2>
+        </div>
+      )}
       {messagesData ? (
         <div className="chat-message-list-container">
           <div className="chat-messages-container">
-            <Message
-              className="chat-message event"
-              data={{ message: "Sample event " + props.event.name }}
-              event
-              startsSequence
-              endsSequence />
-
             {messagesData.map(message => message.isFromNextUser ? (
               <div className='flex-container'>
                 <Avatar className='avatar'
@@ -137,14 +152,22 @@ export default function EventChat(
                   data={{ message: message.content }}
                   startsSequence />
               </div>
-            ) : (
+            ) : message.isFromPrevUser ? (
+              <Message
+                className="chat-message starting"
+                starting
+                data={{ message: message.content, username: message.fromUser?.username }}
+                startsSequence
+                endsSequence />
+            ) :            
+            (
               <Message
                 className="chat-message"
                 data={{ message: message.content }}
                 startsSequence
                 endsSequence />
             ))}
-            
+            <div ref={messagesEndRef}></div> {/* Marker for scrolling */}
           </div>
           <div className='send-message-containter'>
             <Textarea value={messageText} onChange={handle_Message_Change} />
