@@ -94,8 +94,14 @@ export namespace WebApi {
     return user;
   }
 
-  export async function getUsers(id: number) : Promise<User[]> {
+  export async function getUsersFromEvent(id: number) : Promise<User[]> {
     const response: AxiosResponse<ServerResponse<User[]>> = await sendRequest("GET", `/api/events/${id}/users`, null);
+    const users: User[] = response.data.body;
+    return users;
+  }
+
+  export async function getUsers() : Promise<User[]> {
+    const response: AxiosResponse<ServerResponse<User[]>> = await sendRequest("GET", `/api/users`, null);
     const users: User[] = response.data.body;
     return users;
   }

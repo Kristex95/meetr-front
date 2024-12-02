@@ -42,7 +42,7 @@ export default function EventChat(
     // Load data when chat is available
     const loadData = async () => {
       if (props.chat) {
-        const users: WebApi.User[] = await WebApi.getUsers(props.chat.id);
+        const users: WebApi.User[] = await WebApi.getUsersFromEvent(props.chat.id);
         const messages: WebApi.Message[] = await WebApi.getChatMessages(props.chat.id);
         setUsers(users);
         setLoadedMessages(messages);

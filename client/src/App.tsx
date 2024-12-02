@@ -11,7 +11,6 @@ import {
   FluentProvider,
   webLightTheme,
 } from "@fluentui/react-components";
-import Menu from './Components/MainPage/Menu/Menu';
 
 export default function App() {
   const [pageType, setPageType] = React.useState<string>('login');
@@ -48,20 +47,18 @@ export default function App() {
     setPageType('main');
   };
 
-  const handle_LogOut_Click = () => {
-    setLogData(null);
-    localStorage.removeItem('authToken');
-    setPageType('login');
-  }
-
   if (isLoading) {
     return <div>Loading...</div>; // Show a loading indicator while checking the token
   }
 
   return (
     <FluentProvider theme={webLightTheme}>
-      <MainPage/>
-      
+      {pageType === 'login' ? (
+        <LoginPage 
+        onLogInClick={handle_LogIn_Click}/>
+      ) : (
+        <MainPage/>
+      )}
     </FluentProvider>
   );
 }
