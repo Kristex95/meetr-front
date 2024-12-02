@@ -139,7 +139,7 @@ export namespace WebApi {
   }
 
   export async function changeUserData(user: User) {
-    return await sendRequest("PUT", `/api/users/${loggedInUserId}`, user);
+    return await sendRequest("PUT", `/api/users`, user);
   }
 
   export async function changePassword(oldPassword: string, newPassword: string) {
@@ -148,6 +148,6 @@ export namespace WebApi {
       newPassword: newPassword,
     };
 
-    return await sendRequest("PUT", `/api/users/${loggedInUserId}`, data);
+    return await sendRequest("PUT", `/api/users`, data);
   }
 }
