@@ -1,0 +1,11 @@
+.user-settings-dialog {
+  height: 95%!important;
+  max-height: 500px!important;
+  width: 300px;
+}
+
+.change-userinfo-dialog {
+  height: 95%!important;
+  max-height: 450px!important;
+  width: 280px;
+}
