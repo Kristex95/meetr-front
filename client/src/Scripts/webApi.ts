@@ -164,6 +164,12 @@ export namespace WebApi {
     const messages: Message[] = response.data.body;
     return messages; 
   };
+
+  export async function getChatParticipants(chatId: number) : Promise<User[]> {
+    const response: AxiosResponse<ServerResponse<User[]>> = await sendRequest("GET", `/api/events/${chatId}/users`, null);
+    const users: User[] = response.data.body;
+    return users; 
+  };
   
 
   export async function createMessage(chatId: string, message: string) {

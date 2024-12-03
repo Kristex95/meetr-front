@@ -89,7 +89,6 @@ export default function Menu(props: any & {
     props.onLogOut();
   }
 
-
   return (
     <FluentProvider theme={webDarkTheme}>
       <div>
@@ -169,15 +168,9 @@ export default function Menu(props: any & {
           isOpen={isFriendsOpen}
           onOpenChange={handle_Friends_OpenChange} />
 
-        <AddUsersDialog
-          title="Add friend"
+        <AddFriends
           isOpen={isAddFriendsOpen}
-          onOpenChange={handle_AddFriends_OpenChange}
-          onSave={async (users) => {
-            const friendIds = users.map(friend => friend.id);
-
-            await WebApi.addFriends(friendIds);
-          }} />
+          onOpenChange={handle_AddFriends_OpenChange} />
 
         <Settings
           isOpen={isSettingsOpen}

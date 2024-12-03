@@ -14,7 +14,7 @@ import {
   webDarkTheme,
 } from "@fluentui/react-components";
 import { DatePicker } from "@fluentui/react-datepicker-compat";
-import { Dismiss24Regular, LockClosedRegular, PersonRegular, InfoRegular, PeopleAddRegular } from "@fluentui/react-icons";
+import { Dismiss24Regular, LockClosedRegular, PersonRegular, InfoRegular, PeopleAddRegular, PeopleTeamRegular } from "@fluentui/react-icons";
 
 import './EventInfoDialog.css'
 import { WebApi } from "../../../../Scripts/webApi";
@@ -22,6 +22,7 @@ import SectionButton from "../../../Other/SectionButton/SectionButton";
 import { ChangeFieldDialog } from "../../../Other/ChangeFieldDialog/ChangeFieldDialog";
 import SectionInfo from "../../../Other/SectionInfo/SectionInfo";
 import { AddUsersDialog } from "../../../Other/AddUsersDialog/AddUsersDialog";
+import { Members } from "./Members";
 
 export const EventInfoDialog = (props: {
   isOpen: boolean,
@@ -49,6 +50,13 @@ export const EventInfoDialog = (props: {
     for (const user of users) {
       await WebApi.addEventMembers(props.event.id, user.id);
     }
+  }
+
+  const getFriendsNotMembers = async () => {
+    const friends = await WebApi.getFriends() || [];
+    const members = await WebApi.getChatParticipants(props.event.id) || [];
+
+    return friends.filter(f => !members.some(m => m.id === f.id));
   }
 
   return (
@@ -79,8 +87,13 @@ export const EventInfoDialog = (props: {
                   icon={<PersonRegular />} >
                 </SectionButton>
                 <SectionButton
+                  name="Members"
+                  dialog={p => Members({...p, event: props.event})}
+                  icon={<PeopleTeamRegular />} >
+                </SectionButton>
+                <SectionButton
                   name="Add Members"
-                  dialog={p => AddUsersDialog({...p, title: "Add member", onSave: u => handle_AddMember_Click(u, props.event.id), getUsers: WebApi.getFriends})}
+                  dialog={p => AddUsersDialog({...p, title: "Add member", onSave: u => handle_AddMember_Click(u, props.event.id), getUsers: getFriendsNotMembers})}
                   icon={<PeopleAddRegular />} >
                 </SectionButton>
               </div>

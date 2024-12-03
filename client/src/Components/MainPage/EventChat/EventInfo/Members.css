@@ -1,0 +1,28 @@
+.friends-dialog {
+  height: 95%!important;
+  max-height: 500px!important;
+  width: 300px;
+}
+
+.dialog-body {
+  height: 100%;
+}
+
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}
+
+.validation-error {
+  color: lightcoral;
+}
+
+span.validation-error {
+  border-color: lightcoral;
+}
+
+div.validation-error {
+  font-size: 12px;
+  margin-left: 12px;
+}
