@@ -124,7 +124,9 @@ export default function EventChat(
   };
 
   const handle_Message_Change: TextareaProps["onChange"] = (ev, data) => {
-    setMessage(data.value);
+    if (data.value.length <= 300) {
+      setMessage(data.value);
+    }
   };
 
   const handle_EventHeader_Click = () => {
