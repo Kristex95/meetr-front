@@ -28,6 +28,7 @@
 .chat-messages-container {
   padding: 1em;
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .chat-message {

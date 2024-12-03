@@ -72,3 +72,10 @@
   font-weight: bold;
   color: rgb(217, 127, 37);
 }
+
+.bubble-message {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-word;
+  text-align: left;
+}

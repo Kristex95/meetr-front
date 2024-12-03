@@ -16,6 +16,35 @@ export namespace WebApi {
     message: object,
   }
 
+  export declare type Pagable<T> = {
+    content: T,
+    pageable: {
+      pageNumber: number,
+      pageSize: number,
+      sort: {
+          empty: boolean,
+          sorted: boolean,
+          unsorted: boolean
+      },
+      offset: number,
+      paged: boolean,
+      unpaged: boolean
+  },
+    last: boolean,
+    totalPages: number,
+    totalElements: number,
+    size: number,
+    number: number,
+    sort: {
+      empty: boolean,
+      sorted: boolean,
+      unsorted: boolean
+    },
+    first: boolean,
+    numberOfElements: number,
+    empty: boolean
+  }
+
   export declare type Chat = {
     id: number,
     eventId: number,
@@ -106,6 +135,12 @@ export namespace WebApi {
     return users;
   }
 
+  export async function getFriends() : Promise<User[]> {
+    const response: AxiosResponse<ServerResponse<User[]>> = await sendRequest("GET", `/api/users/friends`, null);
+    const users: User[] = response.data.body;
+    return users;
+  }
+
   export async function getCurrentUserChats() : Promise<Chat[]>{
     const response: AxiosResponse<ServerResponse<Chat[]>> = await sendRequest("GET", "/api/users/chats", null);
     const chats: Chat[] = response.data.body;
@@ -157,6 +192,7 @@ export namespace WebApi {
     return await sendRequest("PUT", `/api/users`, data);
   }
 
-  export async function addFriends(users: User[]) {
+  export async function addFriends(users: number[]) {
+    return await sendRequest("POST", `/api/users/addFriends`, { newFriendsIds : users});
   }
 }

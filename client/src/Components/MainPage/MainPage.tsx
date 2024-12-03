@@ -6,10 +6,18 @@ import "./MainPage.css";
 import Sidebar from './Sidebar/Sidebar';
 import Menu from './Menu/Menu';
 
-export default function MainPage() {
+export default function MainPage(props: {
+  onLogOutClick: () => void
+}) {
   const [selectedChat, setSelectedChat] = React.useState<any>(undefined);
   const [selectedEvent, setSelectedEvent] = React.useState<any>(undefined);
   const [isMenuActive, setIsMenuActive] = React.useState<boolean>(false);
+  const [userData, setUserData] = React.useState<WebApi.User>();
+
+
+  React.useEffect(() => {
+    WebApi.getLoggedInUser().then((user: WebApi.User) => setUserData(user));
+  }, [])
 
   const handle_EventChatList_Click = async (event: WebApi.Event) => {
     const chat: WebApi.Chat = await WebApi.getEventMainChat(event.id);
@@ -33,6 +41,10 @@ export default function MainPage() {
     setIsMenuActive(!isMenuActive);
   }
 
+  const handle_LogOut = () => {
+    props.onLogOutClick();
+  }
+
   return (
     <div className="main-page-container">
         <Sidebar 
@@ -40,7 +52,7 @@ export default function MainPage() {
           onOpenMenuClick={handle_OpenCloseMenu_Click}
         />
         <EventChat chat={selectedChat} event={selectedEvent} onSendMessageClick={handle_SendMessage_Click} />
-        <Menu active={isMenuActive} onCloseMenuClick={handle_OpenCloseMenu_Click}/>
+        <Menu active={isMenuActive} onCloseMenuClick={handle_OpenCloseMenu_Click} user={userData} onLogOut={handle_LogOut}/>
     </div>
   );
 }

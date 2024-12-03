@@ -51,7 +51,7 @@ export default function EventChat(
         setLoadedMessages(messages);
 
         // Create WebSocket connection if chat is present
-        const ws = new WebSocket(`ws://localhost:8089/ws?token=${encodeURIComponent(token)}`);
+        const ws = new WebSocket(`ws://kristex.asuscomm.com:57775/ws?token=${encodeURIComponent(token)}`);
 
         // WebSocket Event Handlers
         ws.onopen = () => {

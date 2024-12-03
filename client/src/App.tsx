@@ -47,6 +47,12 @@ export default function App() {
     setPageType('main');
   };
 
+  const handle_LogOut_Click = () => {
+    setLogData(null);
+    localStorage.removeItem('authToken');
+    setPageType('login');
+  }
+
   if (isLoading) {
     return <div>Loading...</div>; // Show a loading indicator while checking the token
   }
@@ -57,7 +63,7 @@ export default function App() {
         <LoginPage 
         onLogInClick={handle_LogIn_Click}/>
       ) : (
-        <MainPage/>
+        <MainPage onLogOutClick={handle_LogOut_Click}/>
       )}
     </FluentProvider>
   );

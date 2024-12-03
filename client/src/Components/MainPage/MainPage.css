@@ -2,7 +2,7 @@
   display: grid;
   height: 100vh;
   grid-template-columns: 1fr 6fr;
-
+  grid-template-rows: 20fr 1fr;
   background-color: var(--main-bg-color);
 }
 

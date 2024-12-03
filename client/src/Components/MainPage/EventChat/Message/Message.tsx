@@ -41,7 +41,7 @@ export default function Message(props: React.ComponentProps<any> | {
           starting && 
           <div className='starting'>{data.username}</div>
         }
-        { <div >{data.message}</div> }
+        { <div className='bubble-message'>{data.message}</div> }
         </div>
       </div>
     </div>

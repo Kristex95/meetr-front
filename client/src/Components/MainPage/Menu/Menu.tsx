@@ -17,14 +17,18 @@ import './Menu.css';
 import { NewEvent } from "./NewEvent/NewEvent";
 import { Settings } from "./Settings/Settings";
 import { YesNoDialog } from "../../Other/YesNoDialog/YesNoDialog";
+import { AddFriends } from "./AddFriends/AddFriends";
+import { WebApi } from "../../../Scripts/webApi";
 import { Friends } from "./Friends/Friends";
 
 
 export default function Menu(props: any & {
+  user: WebApi.User,
   onLogOut: () => void;
 }) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isNewEventOpen, setIsNewEventOpen] = React.useState(false);
+  const [isAddFriendsOpen, setIsAddFriendsOpen] = React.useState(false);
   const [isFriendsOpen, setIsFriendsOpen] = React.useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
   const [isLogOutOpen, setIsLogOutOpen] = React.useState(false);
@@ -42,6 +46,11 @@ export default function Menu(props: any & {
     setIsOpen(false);
   }
 
+  const handle_AddFriends_Click = () => {
+    setIsAddFriendsOpen(!isAddFriendsOpen);
+    setIsOpen(false);
+  }
+
   const handle_Settings_Click = () => {
     setIsSettingsOpen(!isSettingsOpen);
     setIsOpen(false);
@@ -53,6 +62,10 @@ export default function Menu(props: any & {
 
   const handle_Friends_OpenChange = (value: boolean) => {
     setIsFriendsOpen(value);
+  }
+
+  const handle_AddFriends_OpenChange = (value: boolean) => {
+    setIsAddFriendsOpen(value);
   }
 
   const handle_Settings_OpenChange = (value: boolean) => {
@@ -95,7 +108,7 @@ export default function Menu(props: any & {
                   aria-label={"user.username"}
                   name={"user.username"}
                 />
-                <div style={{ fontSize: "16px" }}>User</div>
+                <div style={{ fontSize: "16px" }}>{props.user ? props.user.username : "Loading..."}</div>
               </div>
             </DrawerHeaderTitle>
           </DrawerHeader>
@@ -114,6 +127,13 @@ export default function Menu(props: any & {
               icon={<PeopleRegular />}
               onClick={handle_Friends_Click} >
               Friends
+            </Button>
+            <Button
+              className="menu-button"
+              appearance="subtle"
+              icon={<PeopleRegular />}
+              onClick={handle_AddFriends_Click} >
+              Add Friends
             </Button>
             <Button
               className="menu-button"
@@ -147,6 +167,10 @@ export default function Menu(props: any & {
         <Friends
           isOpen={isFriendsOpen}
           onOpenChange={handle_Friends_OpenChange} />
+
+        <AddFriends
+          isOpen={isAddFriendsOpen}
+          onOpenChange={handle_AddFriends_OpenChange} />
 
         <Settings
           isOpen={isSettingsOpen}

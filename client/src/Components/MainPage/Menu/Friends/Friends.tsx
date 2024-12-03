@@ -3,122 +3,94 @@ import {
   Dialog,
   DialogTrigger,
   DialogSurface,
-  DialogTitle,
   DialogBody,
   DialogActions,
   DialogContent,
   Button,
-  Input,
-  Textarea,
-  Spinner,
 } from "@fluentui/react-components";
-import { DatePicker } from "@fluentui/react-datepicker-compat";
-
-import './Friends.css';
-import '../Menu.css'
-import UsersList from "../../../Other/UsersList/UsersList";
-
 import { WebApi } from "../../../../Scripts/webApi";
-import SectionInput from "../../../Other/SectionInput/SectionInput";
+import './Friends.css';
+import '../Menu.css';
 
 export const Friends = (props: {
   isOpen: boolean,
   onOpenChange: (value: boolean) => void,
 }) => {
   const [isOpen, setIsOpen] = React.useState(props.isOpen);
-
   const [friends, setFriends] = React.useState<WebApi.User[]>([]);
   const [validationMessage, setValidationMessage] = React.useState<string>("");
-  const [saving, setSaving] = React.useState<boolean>(false);
-
-  const datePickerRef: any = React.useRef();
 
   React.useEffect(() => {
     setIsOpen(props.isOpen);
 
     if (props.isOpen) {
       setDefaultState();
+      fetchExistingFriends();
     }
   }, [props.isOpen]);
 
   React.useEffect(() => {
     if (isOpen) {
       setDefaultState();
+      fetchExistingFriends();
     }
   }, [isOpen]);
 
   const setDefaultState = () => {
     setValidationMessage("");
-  }
+  };
+
+  const fetchExistingFriends = async () => {
+    try {
+      // Ensure WebApi.getFriends() always returns an array.
+      const currentFriends = await WebApi.getFriends() || [];
+      setFriends(currentFriends);
+    } catch (e: any) {
+      setValidationMessage("Failed to fetch friends.");
+    }
+  };
 
   const closeDialog = () => {
     setIsOpen(false);
     props.onOpenChange(false);
-  }
+  };
 
   const handle_Dialog_OpenChange = (value: boolean) => {
     setIsOpen(value);
     props.onOpenChange(value);
-  }
-
-  const handle_UserList_Change = (members: WebApi.User[]) => {
-    setFriends(members);
-    setValidationMessage("");
-  }
-
-  const handle_Cancel_Click = () => {
-    setFriends([]);
-    setValidationMessage("");
-
-    closeDialog();
-  }
-
-  const handle_Add_Click = async () => {
-    setValidationMessage("");
-
-    if (friends.length === 0) {
-      setValidationMessage("Please add at least one user.");
-      return;
-    }
-
-    setSaving(true);
-
-    try {
-      await WebApi.addFriends(friends);
-
-      setSaving(false);
-    }
-    catch (e: any) {
-      setValidationMessage(e.message);
-      setSaving(false);
-
-      return;
-    }
-
-    closeDialog();
-  }
-
-
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={(event, data) => handle_Dialog_OpenChange(data.open)}>
-      <DialogSurface className="friends-dialog" >
-        <DialogBody className="dialog-body" >
+      <DialogSurface className="friends-dialog">
+        <DialogBody className="dialog-body">
           <DialogContent>
             <div className="dialog-form">
               <div style={{ overflowX: "clip" }}>
-                <UsersList title="Add friend" onChange={handle_UserList_Change} />
+                <h3>Your Existing Friends</h3>
+                {/* Render the list of existing friends */}
+                <ul>
+                  {friends?.length > 0 ? (
+                    friends.map((friend) => (
+                      <li key={friend.id}>
+                        {friend.username}
+                      </li>
+                    ))
+                  ) : (
+                    <li>No friends found.</li>
+                  )}
+                </ul>
               </div>
 
-              {validationMessage &&
+              {validationMessage && (
                 <div className='validation-error'>
                   {validationMessage}
-                </div>}
+                </div>
+              )}
             </div>
           </DialogContent>
           <DialogActions>
-            <Button appearance="secondary" onClick={handle_Cancel_Click}>Cancel</Button>
-            <Button appearance="primary" onClick={handle_Add_Click}>Add</Button>
+            <Button appearance="secondary" onClick={closeDialog}>Close</Button>
           </DialogActions>
         </DialogBody>
       </DialogSurface>
