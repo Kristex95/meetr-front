@@ -195,4 +195,8 @@ export namespace WebApi {
   export async function addFriends(users: number[]) {
     return await sendRequest("POST", `/api/users/addFriends`, { newFriendsIds : users});
   }
+
+  export async function addEventMembers(eventId: number, userId: number) {
+    return await sendRequest("POST", `/api/events/${eventId}/adduser/${userId}`, null);
+  }
 }

@@ -18,6 +18,7 @@ let apiUsers: WebApi.User[] = [];
 export default function UsersList(props: {
   title: string,
   onChange: (users: WebApi.User[]) => void,
+  getUsers?: () => Promise<WebApi.User[]>,
 }) {
   const [users, setUsers] = React.useState<WebApi.User[]>([]);
   const [selectedUsers, setSelectedUsers] = React.useState<WebApi.User[]>([]);
@@ -25,7 +26,9 @@ export default function UsersList(props: {
 
   React.useEffect(() => {
     const loadData = async () => {
-      apiUsers = await WebApi.getUsers();
+      apiUsers = props.getUsers ?
+        await props.getUsers() :
+        await WebApi.getUsers();
 
       setUsers(apiUsers);
     }

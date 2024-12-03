@@ -11,7 +11,7 @@ import {
   webDarkTheme,
   Avatar,
 } from "@fluentui/react-components";
-import { NavigationRegular, PeopleRegular, PeopleTeamRegular, SettingsRegular } from "@fluentui/react-icons";
+import { NavigationRegular, PeopleRegular, PeopleAddRegular, PeopleTeamRegular, SettingsRegular } from "@fluentui/react-icons";
 
 import './Menu.css';
 import { NewEvent } from "./NewEvent/NewEvent";
@@ -20,6 +20,7 @@ import { YesNoDialog } from "../../Other/YesNoDialog/YesNoDialog";
 import { AddFriends } from "./AddFriends/AddFriends";
 import { WebApi } from "../../../Scripts/webApi";
 import { Friends } from "./Friends/Friends";
+import { AddUsersDialog } from "../../Other/AddUsersDialog/AddUsersDialog";
 
 
 export default function Menu(props: any & {
@@ -131,7 +132,7 @@ export default function Menu(props: any & {
             <Button
               className="menu-button"
               appearance="subtle"
-              icon={<PeopleRegular />}
+              icon={<PeopleAddRegular />}
               onClick={handle_AddFriends_Click} >
               Add Friends
             </Button>
@@ -168,9 +169,15 @@ export default function Menu(props: any & {
           isOpen={isFriendsOpen}
           onOpenChange={handle_Friends_OpenChange} />
 
-        <AddFriends
+        <AddUsersDialog
+          title="Add friend"
           isOpen={isAddFriendsOpen}
-          onOpenChange={handle_AddFriends_OpenChange} />
+          onOpenChange={handle_AddFriends_OpenChange}
+          onSave={async (users) => {
+            const friendIds = users.map(friend => friend.id);
+
+            await WebApi.addFriends(friendIds);
+          }} />
 
         <Settings
           isOpen={isSettingsOpen}

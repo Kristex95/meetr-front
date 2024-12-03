@@ -164,7 +164,7 @@ export const NewEvent = (props: {
               ) :
                 step === 1 ? (
                   <div style={{ overflowX: "clip" }}>
-                    <UsersList title="Add members" onChange={handle_UserList_Change} />
+                    <UsersList title="Add members" onChange={handle_UserList_Change} getUsers={WebApi.getFriends} />
                   </div>
 
                 ) : null}

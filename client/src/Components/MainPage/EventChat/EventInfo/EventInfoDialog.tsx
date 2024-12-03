@@ -14,13 +14,14 @@ import {
   webDarkTheme,
 } from "@fluentui/react-components";
 import { DatePicker } from "@fluentui/react-datepicker-compat";
-import { Dismiss24Regular, LockClosedRegular, PersonRegular, InfoRegular } from "@fluentui/react-icons";
+import { Dismiss24Regular, LockClosedRegular, PersonRegular, InfoRegular, PeopleAddRegular } from "@fluentui/react-icons";
 
 import './EventInfoDialog.css'
 import { WebApi } from "../../../../Scripts/webApi";
 import SectionButton from "../../../Other/SectionButton/SectionButton";
 import { ChangeFieldDialog } from "../../../Other/ChangeFieldDialog/ChangeFieldDialog";
 import SectionInfo from "../../../Other/SectionInfo/SectionInfo";
+import { AddUsersDialog } from "../../../Other/AddUsersDialog/AddUsersDialog";
 
 export const EventInfoDialog = (props: {
   isOpen: boolean,
@@ -42,6 +43,12 @@ export const EventInfoDialog = (props: {
   const handle_Cancel_Click = () => {
     setIsOpen(false);
     props.onOpenChange(false);
+  }
+
+  const handle_AddMember_Click = async (users: WebApi.User[], eventId: number) => {
+    for (const user of users) {
+      await WebApi.addEventMembers(props.event.id, user.id);
+    }
   }
 
   return (
@@ -71,7 +78,11 @@ export const EventInfoDialog = (props: {
                   dialog={p => ChangeFieldDialog({ fieldName: "name", fieldLabel: "Name", ...p })}
                   icon={<PersonRegular />} >
                 </SectionButton>
-
+                <SectionButton
+                  name="Add Members"
+                  dialog={p => AddUsersDialog({...p, title: "Add member", onSave: u => handle_AddMember_Click(u, props.event.id), getUsers: WebApi.getFriends})}
+                  icon={<PeopleAddRegular />} >
+                </SectionButton>
               </div>
             </DialogContent>
           </DialogBody>
