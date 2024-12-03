@@ -182,7 +182,7 @@ export default function EventChat(
           </div>
           <div className='send-message-containter'>
             <Textarea value={messageText} onChange={handle_Message_Change} />
-            <Button icon={<SendRegular />} onClick={handle_SendMessage_Click}></Button>
+            <Button icon={<SendRegular color='#363e4d' />} onClick={handle_SendMessage_Click} style={{height:"100%"}}></Button>
           </div>
         </div>
       ) : (
